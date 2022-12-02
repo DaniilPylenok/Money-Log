@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from 'src/users/user.service';
+import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { LoginGuard } from './guards/login.guard';
@@ -15,14 +16,21 @@ import { RegistrationGuard } from './guards/registration.guard';
 
 @Controller('auth')
 export class AuthContoller {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   @UseGuards(LoginGuard)
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto, @Res() res: Response) {
-    const user = await this.userService.login(loginUserDto);
+    const user = await this.usersService.login(loginUserDto);
+    const access = await this.authService.generateAccessToken(user);
+    const refresh = await this.authService.generateRefreshToken(
+      user._id as string,
+    );
     res.statusCode = HttpStatus.OK;
-    res.send({ username: user.username });
+    return res.send({ ...access, ...refresh, username: user.username });
   }
 
   @UseGuards(RegistrationGuard)
@@ -31,7 +39,7 @@ export class AuthContoller {
     @Body() createUserDto: CreateUserDto,
     @Res() res: Response,
   ) {
-    await this.userService.registration(createUserDto);
+    await this.usersService.registration(createUserDto);
     res.statusCode = HttpStatus.CREATED;
     res.send('user created');
   }
