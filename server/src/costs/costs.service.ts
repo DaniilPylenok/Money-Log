@@ -6,29 +6,29 @@ import { CreateCostDto } from './dto/create-cost.dto';
 import { UpdateCostDto } from './dto/update-cost.dto';
 
 @Injectable()
-export class CostService {
+export class CostsService {
   constructor(
-    @InjectModel(Cost.name) private costModel: Model<CostsDocument>,
+    @InjectModel(Cost.name) private costsModel: Model<CostsDocument>,
   ) {}
 
   async findAll(id: string): Promise<Cost[]> {
-    return this.costModel.find({ userId: id });
+    return this.costsModel.find({ userId: id });
   }
 
   async findOne(id: string): Promise<Cost> {
-    return this.costModel.findOne({ _id: id });
+    return this.costsModel.findOne({ _id: id });
   }
 
   async create(CreateCostDto: CreateCostDto): Promise<Cost> {
-    const createdCost = new this.costModel(CreateCostDto);
+    const createdCost = new this.costsModel(CreateCostDto);
     return createdCost.save();
   }
 
   async update(updateCostDto: UpdateCostDto, id: string): Promise<Cost> {
-    await this.costModel.updateOne(
+    await this.costsModel.updateOne(
       { _id: id },
       {
-        set: {
+        $set: {
           ...updateCostDto,
         },
       },
@@ -37,6 +37,6 @@ export class CostService {
   }
 
   async delete(id: string): Promise<void> {
-    await this.costModel.deleteOne({ _id: id });
+    await this.costsModel.deleteOne({ _id: id });
   }
 }

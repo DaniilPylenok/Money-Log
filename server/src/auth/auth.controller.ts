@@ -11,6 +11,7 @@ import { UsersService } from 'src/users/user.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { RefreshTokenDto } from './dto/refresh-toke.guard';
 import { LoginGuard } from './guards/login.guard';
 import { RegistrationGuard } from './guards/registration.guard';
 
@@ -42,5 +43,37 @@ export class AuthContoller {
     await this.usersService.registration(createUserDto);
     res.statusCode = HttpStatus.CREATED;
     res.send('user created');
+  }
+
+  @UseGuards(RegistrationGuard)
+  @Post('refresh')
+  async refreshToken(
+    @Body() refreshTokenDto: RefreshTokenDto,
+    @Res() res: Response,
+  ) {
+    const validToken = this.authService.verify(refreshTokenDto.refresh_token);
+    const user = await this.usersService.findOne(refreshTokenDto.username);
+    const access = await this.authService.generateAccessToken(user);
+
+    if (validToken?.error) {
+      if (validToken?.error === 'jwt expired') {
+        const refresh = await this.authService.generateRefreshToken(
+          user._id as string,
+        );
+        res.statusCode = HttpStatus.OK;
+        return res.send({ ...access, ...refresh });
+      } else {
+        res.statusCode = HttpStatus.BAD_REQUEST;
+        return res.send({ error: validToken?.error });
+      }
+    }
+    // !!!!!! доделать обновление и реф токена
+    else {
+      res.statusCode = HttpStatus.OK;
+      return res.send({
+        ...access,
+        refresh_token: refreshTokenDto.refresh_token,
+      });
+    }
   }
 }

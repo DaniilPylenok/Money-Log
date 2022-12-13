@@ -1,0 +1,19 @@
+* {
+  cursor: default;
+}
+
+.auth-label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+  cursor: pointer;
+}
+
+.auth-btn {
+  background-color: cadetblue;
+}
+
+.question-text {
+  display: inline-block;
+  margin: 7px;
+}

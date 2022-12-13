@@ -1,12 +1,12 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsOptional } from 'class-validator';
 
 export class UpdateCostDto {
   @IsOptional()
   readonly text: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   readonly price: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   readonly date: Date;
 }
