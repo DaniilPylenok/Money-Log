@@ -6,7 +6,9 @@ import Spinner from "../Spinner/Spinner";
 import "./style.css";
 
 export default function Auth({ type }: { type: "login" | "registration" }) {
-  const { error, login, loading } = useTypesSelector((state) => state.user);
+  const { error, login, loading, user } = useTypesSelector(
+    (state) => state.user
+  );
   const { fetchLoginUser, fetchRegisterUser } = useActions();
   const currentAuth =
     type === "login"

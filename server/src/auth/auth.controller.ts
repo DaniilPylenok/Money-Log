@@ -40,9 +40,13 @@ export class AuthContoller {
     @Body() createUserDto: CreateUserDto,
     @Res() res: Response,
   ) {
-    await this.usersService.registration(createUserDto);
+    const user = await this.usersService.registration(createUserDto);
+    const access = await this.authService.generateAccessToken(user);
+    const refresh = await this.authService.generateRefreshToken(
+      user._id as string,
+    );
     res.statusCode = HttpStatus.CREATED;
-    res.send('user created');
+    res.send({ ...access, ...refresh, username: user.username });
   }
 
   @UseGuards(RegistrationGuard)
