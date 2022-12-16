@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 export const useTheme = () => {
   const [theme, setTheme] = useState(
     JSON.parse(localStorage.getItem("theme") as string) || "dark"

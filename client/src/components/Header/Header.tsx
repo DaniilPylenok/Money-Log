@@ -3,13 +3,19 @@ import { useTheme } from "../../hooks/useTheme";
 import { useTypesSelector } from "../../hooks/useTypedSelector";
 import Spinner from "../Spinner/Spinner";
 
-export const Header = () => {
+export default function Header() {
   const { theme, switchTheme } = useTheme();
-  const { login, loading, user } = useTypesSelector((state) => state.user);
+  const { login, loading, userInfo } = useTypesSelector((state) => state.user);
+  const { costs } = useTypesSelector((state) => state.cost);
   const [spinner, setSpinner] = useState(false);
 
   useEffect(() => {
-    setSpinner((prev) => !prev);
+    if (loading) {
+      setSpinner(true);
+    }
+    if (!loading) {
+      setSpinner(false);
+    }
   }, [loading]);
 
   return (
@@ -21,7 +27,7 @@ export const Header = () => {
       {spinner ? <Spinner top={20} left={20} /> : null}
       <div className="container">
         <h1 style={{ color: "white" }}>MoneyLog</h1>
-        {login === true && <div>{user?.username}</div>}
+        {login === true && <div>{userInfo?.username}</div>}
         <div style={{ display: "flex", flexDirection: "row", gap: "15px" }}>
           <button
             onClick={switchTheme}
@@ -35,4 +41,4 @@ export const Header = () => {
       </div>
     </header>
   );
-};
+}

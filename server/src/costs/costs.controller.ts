@@ -37,13 +37,14 @@ export class CostsContoller {
   @UseGuards(JwtGuard)
   @Post()
   @HttpCode(HttpStatus.OK)
-  async create(@Body() createCostDto: CreateCostDto, @Req() req) {
+  async create(@Body() createCostDto: CreateCostDto, @Req() req, @Res() res) {
     const user = await this.authService.getUserByToken(req.token);
-
-    return await this.costsService.create({
+    await this.costsService.create({
       ...createCostDto,
       userId: user._id as string,
     });
+    const costs = await this.costsService.findAll(user._id.toString());
+    return res.send(costs);
   }
 
   @UseGuards(JwtGuard)

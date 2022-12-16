@@ -1,0 +1,17 @@
+.cost-item {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid, white;
+  border-radius: 20px;
+  box-sizing: border-box;
+  margin-bottom: 0px;
+}
+
+.costs-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  gap: 20px;
+}

@@ -16,7 +16,6 @@ export class JwtGuard implements CanActivate {
     // @ts-ignore
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-
     const token = request.headers.authorization.split(' ')[1];
 
     if (!token) {

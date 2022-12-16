@@ -65,7 +65,11 @@ export class AuthContoller {
           user._id as string,
         );
         res.statusCode = HttpStatus.OK;
-        return res.send({ ...access, ...refresh });
+        return res.send({
+          ...access,
+          ...refresh,
+          username: refreshTokenDto.username,
+        });
       } else {
         res.statusCode = HttpStatus.BAD_REQUEST;
         return res.send({ error: validToken?.error });
@@ -77,6 +81,7 @@ export class AuthContoller {
       return res.send({
         ...access,
         refresh_token: refreshTokenDto.refresh_token,
+        username: refreshTokenDto.username,
       });
     }
   }

@@ -19,7 +19,7 @@ export class RegistrationGuard implements CanActivate {
     const { username } = request.body;
     const user = await this.authService.validateUser(username);
 
-    if (user) {
+    if (!user) {
       throw new UnauthorizedException('Недопустимые значения');
     }
 

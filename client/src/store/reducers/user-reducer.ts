@@ -1,7 +1,7 @@
 import { UserActionType, UserAction, UserState } from "../../types/redux/user";
 
 const initialState: UserState = {
-  user: null,
+  userInfo: null,
   loading: false,
   login: false,
   error: null,
@@ -18,7 +18,7 @@ export const userReducer = (
       return {
         ...state,
         loading: false,
-        user: action.payload,
+        userInfo: action.payload,
         login: true,
         error: null,
       };

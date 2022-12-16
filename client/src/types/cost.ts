@@ -1,13 +1,13 @@
 export interface ICost {
-  id: string;
+  _id: string;
   text: string;
   price: number;
   date: Date;
 }
 
 export interface CostInfo {
-  id?: string,
-  text?: string;
-  price?: number;
-  date?: Date;
+  id?: string;
+  text: string;
+  price: number;
+  date: Date | string;
 }

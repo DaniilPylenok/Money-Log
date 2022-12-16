@@ -1,7 +1,7 @@
 import { IUser } from "../user";
 
 export interface UserState {
-  user: IUser | null;
+  userInfo: IUser | null;
   loading: boolean;
   login: boolean;
   error: null | string;

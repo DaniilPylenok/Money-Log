@@ -1,20 +1,16 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useActions } from "../../hooks/useAction";
+import { useActionsUser } from "../../hooks/useActionUser";
 import { useTypesSelector } from "../../hooks/useTypedSelector";
-import Spinner from "../Spinner/Spinner";
 import "./style.css";
 
 export default function Auth({ type }: { type: "login" | "registration" }) {
-  const { error, login, loading, user } = useTypesSelector(
-    (state) => state.user
-  );
-  const { fetchLoginUser, fetchRegisterUser } = useActions();
+  const { error, login } = useTypesSelector((state) => state.user);
+  const { fetchLoginUser, fetchRegisterUser, fetchAuthUser } = useActionsUser();
   const currentAuth =
     type === "login"
       ? { title: "Вход", btn: "Войти" }
       : { title: "Регистрация", btn: "Зарегистрироваться" };
-  const [spinner, setSpinner] = useState(false);
   const [userName, setUserName] = useState("");
   const [userPass, setUserPass] = useState("");
   const navigation = useNavigate();
@@ -38,13 +34,19 @@ export default function Auth({ type }: { type: "login" | "registration" }) {
   }
 
   useEffect(() => {
-    setSpinner((prev) => !prev);
-  }, [loading]);
+    const info = JSON.parse(localStorage.getItem("userInfo") || "{}");
+
+    if (info?.username) {
+      fetchAuthUser({
+        username: info.username,
+        refresh_token: info.refresh_token,
+      });
+    }
+  }, []);
 
   return (
     <div className="container">
       <h2>{currentAuth.title}</h2>
-      {spinner ? <Spinner top={20} left={20} /> : null}
       {error && <div>Произошла ошибка</div>}
       <form className="form-group" action="post">
         <label className="auth-label">
